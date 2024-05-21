@@ -8,86 +8,86 @@ namespace laba1
         public static void Main(string[] args)
         {
 
+            DoublyLinkedList doublyLinked = new DoublyLinkedList();
             ChainList chainList = new ChainList();
             ArrayList arrayList = new ArrayList();
 
             Random random = new Random();
-            
-            for (int i = 1; i < 50; i++)
-            {
-                int operations = random.Next(1, 5);
-                int data = random.Next(100);
-                int indexAr = random.Next(arrayList.Count);
-                int indexCh = random.Next(chainList.Count);
 
-                switch (operations)
-                {
+            for (int i = 0; i < 10000; i++)
+            {
+                int operation = random.Next(1, 5);
+                int index = random.Next(50);
+                int Data = random.Next(50);
+
+                                
+                switch (operation){
+
                     case 1:
-                        arrayList.Add(data);
-                        chainList.Add(data);
-                        Console.WriteLine($"Array added: {data}");
-                        Console.WriteLine($"Chain added: {data}");
+                        arrayList.Add(Data);
+                        chainList.Add(Data);
+                        doublyLinked.Add(Data);
                         break;
 
                     case 2:
-                        if (arrayList.Count > 0 && indexAr < arrayList.Count)
-                        {
-                            int deletedFromArray = arrayList[indexAr]; // сохраняем значение для вывода
-                            arrayList.Delete(indexAr);
-                            Console.WriteLine($"Array deleted: {deletedFromArray}"); // выводим сохраненное значение
-                        }
-                        if (chainList.Count > 0 && indexCh < chainList.Count)
-                        {
-                            int deletedFromChain = chainList.Find(indexCh); // сохраняем значение для вывода
-                            chainList.RemoveAt(indexCh);
-                            Console.WriteLine($"Chaim removed: {deletedFromChain}"); // выводим сохраненное значение
-                        }
+                        arrayList.Delete(index);
+                        chainList.RemoveAt(index);
+                        doublyLinked.RemoveAt(index);
                         break;
 
-                    case 3:
-                        if (indexAr < arrayList.Count || indexCh < chainList.Count)
-                        {
-                            arrayList.Insert(data, indexAr);
-                            chainList.Insert(data, indexCh);
-                            Console.WriteLine($"Array inserted: {data}, on index {indexAr}");
-                            Console.WriteLine($"Chain inserted: {data}, on index: {indexCh}");
-                        }
-                        break;
+                    //case 3:
+                    //    arrayList.Insert(index, Data);
+                    //    chainList.Insert(index, Data);
+                    //    doublyLinked.Insert(index, Data);
+                    //    break;
 
-                    case 4:
-                        if (arrayList.Count > 0)
-                        {
-                            int get_value = arrayList[indexAr];
-                            arrayList[indexAr] = data;
-                            Console.WriteLine($"Array set: {data}, instead of got value: {get_value}, on index {indexAr}");
-                            Console.WriteLine("Chain haven't such functinos");
-                            get_value = 0;
-                        }
+                    //case 4:
+
+                    //    //arrayList.Clear();
+                    //    //chainList.Clear();
+                    //    //doublyLinked.Clear();
+                    //    break;
+
+                    case 5:
+                        arrayList[i] = Data;
+                        chainList[i] = Data;
+                        doublyLinked[i] = Data;
                         break;
                 }
 
-                if (chainList.Count > 0 || arrayList.Count > 0)
-                {
-                    Console.Write("ArrayList: ");
-                    arrayList.Print();
-                    Console.WriteLine();
-                    Console.Write("ChainList: ");
-                    chainList.Print();
-                    Console.WriteLine();
-                    Console.WriteLine("----------------");
-                }
             }
 
-            Console.WriteLine("--> All tests passed! <--");
-            arrayList.Clear();
-            chainList.Clear();
-            Console.WriteLine("Array cleared");
-            Console.WriteLine("Chain cleared");
-            Console.Write("ArrayList: ");
+            Console.WriteLine("ArrayList:");
             arrayList.Print();
-            Console.WriteLine();
-            Console.Write("ChainList: ");
+            Console.WriteLine("ChainList:");
             chainList.Print();
+            Console.WriteLine("DoublyLinkedList:");
+            doublyLinked.Print();
+
+            AreListsEqual(arrayList, chainList, doublyLinked);
+
+            void AreListsEqual(ArrayList arrayList, ChainList chainList, DoublyLinkedList doublyLinkedList)
+            {
+                bool areEqual = true;
+
+                if (arrayList.Count != chainList.Count || arrayList.Count != doublyLinkedList.Count)
+                {
+                    areEqual = false;
+                }
+                else
+                {
+                    for (int i = 0; i < arrayList.Count; i++)
+                    {
+                        if (arrayList[i] != chainList[i] || arrayList[i] != doublyLinkedList[i])
+                        {
+                            areEqual = false;
+                            break;
+                        }
+                    }
+                }
+
+                Console.WriteLine($"Равны ли списки?: {areEqual}");
+            }
         }
     }
 }

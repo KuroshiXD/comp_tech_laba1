@@ -13,6 +13,7 @@ namespace laba1
             if (head == null)
             {
                 head = newNode;
+                Node.count++;
                 return;
             }
 
@@ -24,30 +25,36 @@ namespace laba1
             }
 
             current.Next = newNode;
-
             Node.count++;
         }
 
-        public int Find(int index)
+        public Node Find(int index)
         {
-            int currentIndex = 0;
+            if (index < 0 || index >= Node.count)
+            {
+                return null;
+            }
 
+            int currentIndex = 0;
             Node current = head;
 
             while (current != null)
             {
                 if (currentIndex == index)
                 {
-                    return current.Data;
+                    return current;
                 }
                 current = current.Next;
                 currentIndex++;
             }
-            throw new IndexOutOfRangeException();
+
+            return null;
         }
 
         public void RemoveAt(int index)
         {
+            if (index < 0 || index >= Node.count) return;
+
             if (index == 0)
             {
                 head = head.Next;
@@ -69,43 +76,55 @@ namespace laba1
                 currentIndex++;
                 current = current.Next;
             }
-
-            throw new IndexOutOfRangeException();
         }
 
         public void Insert(int data, int index)
         {
+            if (index < 0 || index > Node.count) return;
+
+            Node newNode = new Node(data);
+
+            if (index == 0)
+            {
+                newNode.Next = head;
+                head = newNode;
+                Node.count++;
+                return;
+            }
 
             Node current = head;
             int currentIndex = 0;
 
-            if (index < 0 || index > Node.count)
+            while (current != null)
             {
-                throw new IndexOutOfRangeException();
-            }
-
-            if (index == 0)
-            {
-                Node currentNode = new Node(data);
-                currentNode.Next = head;
-                head = currentNode;
-                Node.count++;
-
-            }
-            else
-            {
-                while (current != null)
+                if (currentIndex + 1 == index)
                 {
-                    if (currentIndex + 1 == index)
-                    {
-                        Node currentNode = new Node(data);
-                        currentNode.Next = current.Next;
-                        current.Next = currentNode;
-                        Node.count++;
-                        return;
-                    }
-                    currentIndex++;
-                    current = current.Next;
+                    newNode.Next = current.Next;
+                    current.Next = newNode;
+                    Node.count++;
+                    return;
+                }
+                currentIndex++;
+                current = current.Next;
+            }
+        }
+
+        public int this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= Node.count) return 0;
+
+                Node node = Find(index);
+                return node.Data;
+            }
+            set
+            {
+                if (index >= 0 && index < Node.count)
+                {
+                    Node node = Find(index);
+                    if (node != null)
+                        node.Data = value;
                 }
             }
         }
@@ -119,6 +138,7 @@ namespace laba1
                 Console.Write(current.Data + " ");
                 current = current.Next;
             }
+            Console.WriteLine();
         }
 
         public void Clear()
@@ -144,6 +164,5 @@ namespace laba1
             Data = data;
             Next = null;
         }
-
     }
 }

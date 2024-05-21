@@ -4,14 +4,12 @@ namespace laba1
 {
     public class ArrayList
     {
-
         private int[] buffer;
         private int count;
         private int capacity;
 
         public ArrayList()
         {
-
             capacity = 5;
             buffer = new int[capacity];
             count = 0;
@@ -36,7 +34,7 @@ namespace laba1
 
         public void Insert(int item, int index)
         {
-            CheckException(index);
+            if (index < 0 || index > count) return;
 
             if (count == buffer.Length)
             {
@@ -54,7 +52,7 @@ namespace laba1
 
         public void Delete(int index)
         {
-            CheckException(index);
+            if (index < 0 || index >= count) return;
 
             for (int i = index; i < count - 1; i++)
             {
@@ -62,14 +60,12 @@ namespace laba1
             }
 
             count--;
-
         }
 
         public void Clear()
         {
-            buffer = null;
+            buffer = new int[capacity];
             count = 0;
-            capacity = 5;
         }
 
         public int Count
@@ -77,32 +73,23 @@ namespace laba1
             get { return count; }
         }
 
-        private void CheckException(int index)
-        {
-            if (index < 0 || index > buffer.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range");
-            }
-        }
-
         public int this[int index]
         {
             get
             {
-                if (index < 0 || index >= buffer.Length)
+                if (index < 0 || index >= count)
                 {
-                    throw new IndexOutOfRangeException(nameof(index));
+                    return 0;
                 }
                 return buffer[index];
             }
 
             set
             {
-                if (index < 0 || index >= buffer.Length)
+                if (index >= 0 && index < count)
                 {
-                    throw new IndexOutOfRangeException(nameof(index));
+                    buffer[index] = value;
                 }
-                buffer[index] = value;
             }
         }
 
@@ -112,6 +99,7 @@ namespace laba1
             {
                 Console.Write(buffer[i] + " ");
             }
+            Console.WriteLine();
         }
     }
 }
